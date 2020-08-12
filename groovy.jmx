@@ -32,7 +32,7 @@
           <boolProp name="displaySystemProperties">false</boolProp>
         </DebugSampler>
         <hashTree>
-          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="log" enabled="true">
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="log" enabled="false">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
@@ -48,13 +48,40 @@ log.error(&quot;This is the log for ERROR level&quot;);
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Assertion>
           <hashTree/>
-          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="println" enabled="true">
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="println" enabled="false">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">def testvar = &quot;simple test&quot;;
 OUT.println(&quot;Use out.println to print message:  &quot; + testvar);
 println(&quot;Use println to log message: &quot; + testvar);
+</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="vars" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">
+vars.put(&quot;test_var_name&quot;,&quot;simple test&quot;);
+def new_var = vars.get(&quot;test_var_name&quot;);
+log.info(&quot;The value of new_var is &quot; + new_var);
+
+vars.put(&quot;a&quot;, &quot;1&quot;);
+def b = 10085;
+def a_add_b = vars.get(&quot;a&quot;).toInteger() + b;
+log.info(&quot;The sum of a + b is: &quot; + a_add_b);
+vars.put(&quot;number&quot;, a_add_b.toString());
+// follows line will be error
+//vars.put(&quot;number_not_string&quot;, a_add_b);
+
+
+
+
+
+
+
 </stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Assertion>
@@ -78,27 +105,7 @@ def testResult = newAdd(1,10085);
 log.info(&quot;The result of 1 + 10085 = &quot; + testResult);</stringProp>
           </JSR223Assertion>
           <hashTree/>
-          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="vars" enabled="false">
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="script">def my_var = vars.get(&quot;varname&quot;);
- 
-log.info(&quot;The value of my_var is &quot; + my_var);
-vars.put(&quot;test_var_name&quot;,&quot;abc123&quot;);
-def new_var = vars.get(&quot;test_var_name&quot;);
-log.info(&quot;The value of new_var is &quot; + new_var);
-
-
-
-
-
-
-</stringProp>
-            <stringProp name="scriptLanguage">groovy</stringProp>
-          </JSR223Assertion>
-          <hashTree/>
-          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="props" enabled="false">
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="props" enabled="true">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
@@ -113,6 +120,7 @@ props.put(&quot;prop_var&quot;,&quot;testt&quot;)
 log.info(&quot;The my props is &quot; + props.get(&quot;prop_var&quot;));
 
 log.info(&quot;线程组名字 &quot; + prev.getThreadName())
+log.info(&quot;my var is: &quot; + vars.get(&quot;a&quot;));
 
 
 </stringProp>
@@ -159,6 +167,40 @@ log.info(&quot;线程组名字 &quot; + prev.getThreadName())
       </hashTree>
       <ConfigTestElement guiclass="PropertyControlGui" testclass="ConfigTestElement" testname="Property Display" enabled="true"/>
       <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="test props and vars" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+          <boolProp name="displayJMeterProperties">false</boolProp>
+          <boolProp name="displayJMeterVariables">true</boolProp>
+          <boolProp name="displaySystemProperties">false</boolProp>
+        </DebugSampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">// output: Another Thread Group call my vars:  null
+log.info(&quot;Another Thread Group call my vars:  &quot; + vars.get(&quot;a&quot;));
+
+//Another Thread Group call my vars:  null
+log.info(&quot;Another Thread Group call my props:  &quot; + props.get(&quot;prop_var&quot;));
+</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
