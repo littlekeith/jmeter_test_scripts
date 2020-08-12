@@ -12,7 +12,7 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -165,9 +165,9 @@ log.info(&quot;my var is: &quot; + vars.get(&quot;a&quot;));
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ConfigTestElement guiclass="PropertyControlGui" testclass="ConfigTestElement" testname="Property Display" enabled="true"/>
+      <ConfigTestElement guiclass="PropertyControlGui" testclass="ConfigTestElement" testname="Property Display" enabled="false"/>
       <hashTree/>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="test props and vars" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="test props and vars" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -198,6 +198,270 @@ log.info(&quot;Another Thread Group call my vars:  &quot; + vars.get(&quot;a&quo
 log.info(&quot;Another Thread Group call my props:  &quot; + props.get(&quot;prop_var&quot;));
 </stringProp>
           </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SampleResult" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+          <boolProp name="displayJMeterProperties">true</boolProp>
+          <boolProp name="displayJMeterVariables">true</boolProp>
+          <boolProp name="displaySystemProperties">true</boolProp>
+        </DebugSampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="false">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import org.apache.jmeter.assertions.AssertionResult;
+
+//set Sample Label
+SampleResult.setSampleLabel(&quot;This test is modified by JSR223 script&quot;);
+ 
+//set Start Time
+def start = System.currentTimeMillis(); //return current time in milliseconds
+SampleResult.setStartTime(start); // set StartTime
+log.info(&quot;Start Time : &quot; + (new Date(start)).toString()); //print the start time in Date format
+//set Response Code
+SampleResult.setResponseCode(&quot;201&quot;);
+//set Response Message
+SampleResult.setResponseMessage(&quot;Simple test via JSR223 script&quot;);
+//set Response Data
+SampleResult.setResponseData(&quot;Set simple data&quot;, &quot;UTF-8&quot;)
+log.info( &quot;The Sample Label is : &quot; + SampleResult.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + SampleResult.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + SampleResult.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + SampleResult.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + SampleResult.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + SampleResult.getResponseDataAsString() );
+AssertionResult assertionResult = new AssertionResult(&quot;JSR223 set assert&quot;).setResultForFailure(&quot;Error msg&quot;);
+assertionResult.setError(true);
+assertionResult.setFailure(true);
+SampleResult.addAssertionResult(assertionResult);
+
+
+log.info( &quot;The Response getAssertionResults is : &quot; + SampleResult.getAssertionResults() );
+ 
+</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Prev" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+          <boolProp name="displayJMeterProperties">true</boolProp>
+          <boolProp name="displayJMeterVariables">true</boolProp>
+          <boolProp name="displaySystemProperties">true</boolProp>
+        </DebugSampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="false">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import org.apache.jmeter.assertions.AssertionResult;
+
+//set Sample Label
+prev.setSampleLabel(&quot;This test is modified by JSR223 script&quot;);
+ 
+//set Start Time
+def start = System.currentTimeMillis(); //return current time in milliseconds
+prev.setStartTime(start); // set StartTime
+log.info(&quot;Start Time : &quot; + (new Date(start)).toString()); //print the start time in Date format
+//set Response Code
+prev.setResponseCode(&quot;201&quot;);
+//set Response Message
+prev.setResponseMessage(&quot;Simple test via JSR223 script&quot;);
+//set Response Data
+prev.setResponseData(&quot;Set simple data&quot;, &quot;UTF-8&quot;)
+log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
+AssertionResult assertionResult = new AssertionResult(&quot;JSR223 set assert&quot;).setResultForFailure(&quot;Error msg&quot;);
+assertionResult.setError(true);
+assertionResult.setFailure(true);
+prev.addAssertionResult(assertionResult);
+
+
+log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertionResults() );
+ 
+</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import org.apache.jmeter.assertions.AssertionResult;
+
+//set Sample Label
+prev.setSampleLabel(&quot;This test is modified by JSR223 script&quot;);
+ 
+//set Start Time
+def start = System.currentTimeMillis(); //return current time in milliseconds
+prev.setStartTime(start); // set StartTime
+log.info(&quot;Start Time : &quot; + (new Date(start)).toString()); //print the start time in Date format
+//set Response Code
+prev.setResponseCode(&quot;201&quot;);
+//set Response Message
+prev.setResponseMessage(&quot;Simple test via JSR223 script&quot;);
+//set Response Data
+prev.setResponseData(&quot;Set simple data&quot;, &quot;UTF-8&quot;)
+log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
+AssertionResult assertionResult = new AssertionResult(&quot;JSR223 set assert&quot;).setResultForFailure(&quot;Error msg&quot;);
+assertionResult.setError(true);
+assertionResult.setFailure(true);
+prev.addAssertionResult(assertionResult);
+
+
+log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertionResults() );
+ 
+</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="false">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">import org.apache.jmeter.assertions.AssertionResult;
+
+//set Sample Label
+prev.setSampleLabel(&quot;This test is modified by JSR223 script&quot;);
+ 
+//set Start Time
+def start = System.currentTimeMillis(); //return current time in milliseconds
+prev.setStartTime(start); // set StartTime
+log.info(&quot;Start Time : &quot; + (new Date(start)).toString()); //print the start time in Date format
+//set Response Code
+prev.setResponseCode(&quot;201&quot;);
+//set Response Message
+prev.setResponseMessage(&quot;Simple test via JSR223 script&quot;);
+//set Response Data
+prev.setResponseData(&quot;Set simple data&quot;, &quot;UTF-8&quot;)
+log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
+AssertionResult assertionResult = new AssertionResult(&quot;JSR223 set assert&quot;).setResultForFailure(&quot;Error msg&quot;);
+assertionResult.setError(true);
+assertionResult.setFailure(true);
+prev.addAssertionResult(assertionResult);
+
+
+log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertionResults() );
+ 
+</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
           <hashTree/>
         </hashTree>
       </hashTree>
