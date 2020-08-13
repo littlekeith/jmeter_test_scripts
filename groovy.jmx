@@ -296,7 +296,7 @@ log.info( &quot;The Response getAssertionResults is : &quot; + SampleResult.getA
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Prev" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Prev" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -309,7 +309,7 @@ log.info( &quot;The Response getAssertionResults is : &quot; + SampleResult.getA
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="false">
           <boolProp name="displayJMeterProperties">true</boolProp>
           <boolProp name="displayJMeterVariables">true</boolProp>
           <boolProp name="displaySystemProperties">true</boolProp>
@@ -352,43 +352,6 @@ log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertion
 </stringProp>
           </JSR223Assertion>
           <hashTree/>
-          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
-            <stringProp name="scriptLanguage">groovy</stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="script">import org.apache.jmeter.assertions.AssertionResult;
-
-//set Sample Label
-prev.setSampleLabel(&quot;This test is modified by JSR223 script&quot;);
- 
-//set Start Time
-def start = System.currentTimeMillis(); //return current time in milliseconds
-prev.setStartTime(start); // set StartTime
-log.info(&quot;Start Time : &quot; + (new Date(start)).toString()); //print the start time in Date format
-//set Response Code
-prev.setResponseCode(&quot;201&quot;);
-//set Response Message
-prev.setResponseMessage(&quot;Simple test via JSR223 script&quot;);
-//set Response Data
-prev.setResponseData(&quot;Set simple data&quot;, &quot;UTF-8&quot;)
-log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
-log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
-log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
-log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
-log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
-log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
-AssertionResult assertionResult = new AssertionResult(&quot;JSR223 set assert&quot;).setResultForFailure(&quot;Error msg&quot;);
-assertionResult.setError(true);
-assertionResult.setFailure(true);
-prev.addAssertionResult(assertionResult);
-
-
-log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertionResults() );
- 
-</stringProp>
-          </JSR223PreProcessor>
-          <hashTree/>
           <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="false">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters"></stringProp>
@@ -422,11 +385,16 @@ prev.addAssertionResult(assertionResult);
 
 
 log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertionResults() );
+def assertionResult = SampleResult.getAssertionResults()[0]
+if (assertionResult.isFailure()) {
+    log.info(&quot;Assertion &quot; + assertionResult.getName() + &quot; failed&quot;)
+    log.info(assertionResult.getFailureMessage())
+}
  
 </stringProp>
           </JSR223PostProcessor>
           <hashTree/>
-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="false">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
               <name>saveConfig</name>
@@ -464,6 +432,155 @@ log.info( &quot;The Response getAssertionResults is : &quot; + prev.getAssertion
           </ResultCollector>
           <hashTree/>
         </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="sampler" enabled="false">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">www.baidu.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">//sampler.setDomain(&quot;www.csdn.com&quot;);
+//sampler.setPath(&quot;/api/test&quot;);
+//sampler.setProtocol(&quot;HTTP&quot;);
+//sampler.setMethod(&quot;GET&quot;);
+//sampler.setPort(80);
+
+log.info(&quot;Sampler Name is: &quot; + sampler.sample().toString());
+log.info(&quot;Domain is: &quot; + sampler.getDomain());
+log.info(&quot;Path is: &quot; + sampler.getPath());
+log.info(&quot;Port is: &quot; + sampler.getPort().toString());
+log.info(&quot;Protocol is: &quot; + sampler.getProtocol());
+log.info(&quot;Method is: &quot; + sampler.getMethod());</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">
+log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
+
+</stringProp>
+          </JSR223PostProcessor>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="false">
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="script">
+log.info( &quot;The Sample Label is : &quot; + prev.getSampleLabel() );
+log.info( &quot;The Start Time in miliseconds is : &quot; + prev.getStartTime() );
+log.info( &quot;The Response Code is : &quot; + prev.getResponseCode() );
+log.info( &quot;The Response Message is : &quot; + prev.getResponseMessage() );
+log.info( &quot;The Response Data is : &quot; + prev.getResponseData() );
+log.info( &quot;The Response Data String is : &quot; + prev.getResponseDataAsString() );
+
+</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="ctx" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">www.baidu.com</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">log.info(&quot;==================================================&quot;);
+log.info(&quot;Current Sampler: &quot; + ctx.getCurrentSampler());
+log.info(&quot;JMeter Engine: &quot; + ctx.getEngine());
+// get previous result
+log.info(&quot;Previous Response Message : &quot; + ctx.getPreviousResult().getResponseMessage());
+log.info(&quot;Previous Response Code : &quot; + ctx.getPreviousResult().getResponseCode());
+log.info(&quot;Previous Response URL : &quot; + ctx.getPreviousResult().getURL());
+log.info(&quot;Previous Response Time : &quot; + ctx.getPreviousResult().getTime());
+log.info(&quot;==================================================&quot;);
+// get previous sampler
+log.info(&quot;Previous Domain : &quot; + ctx.getPreviousSampler().getDomain());
+log.info(&quot;Previous Protocol : &quot; + ctx.getPreviousSampler().getProtocol());
+log.info(&quot;Previous Port : &quot; + ctx.getPreviousSampler().getPort());
+log.info(&quot;Previous Method : &quot; + ctx.getPreviousSampler().getMethod());
+log.info(&quot;==================================================&quot;);
+//get Thread infomations
+log.info(&quot;Thread Name : &quot; + ctx.getThread().getThreadName());
+log.info(&quot;Thread Start Time : &quot; + ctx.getThread().getStartTime());
+log.info(&quot;Thread End Time : &quot; + ctx.getThread().getEndTime());
+log.info(&quot;Thread Number : &quot; + ctx.getThreadNum());
+
+// Thread Group
+log.info(&quot;Start Next Thread Loop on Error: &quot; + ctx.getThreadGroup().getOnErrorStartNextLoop());
+log.info(&quot;Stop Test while Error: &quot; + ctx.getThreadGroup().getOnErrorStopTest());</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
       </hashTree>
     </hashTree>
   </hashTree>
